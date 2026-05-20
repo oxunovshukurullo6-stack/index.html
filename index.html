@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOPIK & EPS-TOPIK - 250 Glass Exam</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            color: #ffffff;
+            font-family: 'Malgun Gothic', 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .bg-circle-1 {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(0, 210, 255, 0.15);
+            border-radius: 50%;
+            top: 15%;
+            left: 20%;
+            filter: blur(80px);
+            z-index: 1;
+        }
+        .bg-circle-2 {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(147, 51, 234, 0.2);
+            border-radius: 50%;
+            bottom: 15%;
+            right: 20%;
+            filter: blur(80px);
+            z-index: 1;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-sizing: border-box;
+            z-index: 2;
+            margin: 20px 0;
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
+        }
+        .highlight {
+            color: #00d2ff;
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+        }
+
+        .setting-box {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 14px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        select, input {
+            background: rgba(15, 23, 42, 0.6);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 8px;
+            width: 120px;
+            text-align: center;
+            outline: none;
+        }
+        select:focus, input:focus {
+            border-color: #00d2ff;
+        }
+
+        .btn-start, .btn-option, .btn-restart {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);
+        }
+        .btn-start:hover, .btn-restart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 210, 255, 0.5);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+        .options-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-option {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: left;
+            border-radius: 14px;
+            padding: 16px 20px;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 1.4;
+            box-shadow: none;
+            margin-top: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .btn-option:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #00d2ff;
+            transform: translateX(4px);
+        }
+
+        .btn-option.correct-choice {
+            background: rgba(34, 197, 94, 0.2) !important;
+            border-color: #22c55e !important;
+            color: #4ade80 !important;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+        }
+        .btn-option.wrong-choice {
+            background: rgba(239, 68, 68, 0.2) !important;
+            border-color: #ef4444 !important;
+            color: #f87171 !important;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+        .disabled-options {
+            pointer-events: none;
+        }
+
+        .timer-bar {
+            height: 4px;
+            background: #00d2ff;
+            width: 100%;
+            margin-top: 12px;
+            border-radius: 3px;
+            transition: width 1s linear;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
+        .info-header {
+            display: flex;
+            justify-content: space-between;
+            color: #a0aec0;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .question-title {
+            font-size: 14px;
+            color: #00d2ff;
+            text-align: left;
+            margin-bottom: 8px;
+        }
+
+        .telegram-box {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .tg-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 12px;
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .tg-link:hover {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: #38bdf8;
+            transform: translateY(-2px);
+        }
+        .tg-icon {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-circle-1"></div>
+<div class="bg-circle-2"></div>
+
+<!-- 1. SOZLAMALAR OYNASI -->
+<div id="setup-box" class="container">
+    <h3 style="color: rgba(255,255,255,0.6); font-size: 14px; letter-spacing: 2px;">EPS-TOPIK & TOPIK</h3>
+    <h1>Mega <span class="highlight">Quiz System</span></h1>
+    <p style="color: #a0aec0; font-size: 14px;" id="total-db-count">Savollar yuklanmoqda...</p>
+
+    <div class="setting-box">
+        <span>Savollar soni:</span>
+        <input type="number" id="quiz-count" value="20" min="1" max="250">
+    </div>
+
+    <div class="setting-box">
+        <span>Vaqt (har bir savol):</span>
+        <select id="quiz-time">
+            <option value="20">20 soniya</option>
+            <option value="30" selected>30 soniya</option>
+            <option value="40">40 soniya</option>
+            <option value="60">60 soniya</option>
+        </select>
+    </div>
+
+    <div class="setting-box">
+        <span>Tartib:</span>
+        <select id="quiz-order">
+            <option value="random">Tasodifiy (Araslashtirilgan)</option>
+            <option value="linear">Ketma-ket</option>
+        </select>
+    </div>
+
+    <button class="btn-start" onclick="startTest()">▶ TESTNI BOSHLASH</button>
+
+    <div class="telegram-box">
+        <a href="https://t.me/eps_master" target="_blank" class="tg-link">
+            <svg class="tg-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-1-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.31-.49.85-.74 3.33-1.45 5.55-2.4 6.67-2.87 3.18-1.31 3.84-1.54 4.27-1.54.09 0 .31.02.45.14.12.1.15.23.16.33-.01.06-.01.14-.02.2z"/></svg>
+            Telegram Kanalimiz
+        </a>
+        <a href="https://t.me/Okhunovich" target="_blank" class="tg-link">
+            <svg class="tg-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Aloqa (Lichka)
+        </a>
+    </div>
+</div>
+
+<!-- 2. TEST JARRAYONI OYNASI -->
+<div id="quiz-box" class="container hidden">
+    <div class="info-header">
+        <span id="question-counter">Savol: 1/20</span>
+        <span id="timer-text">Vaqt: 30s</span>
+    </div>
+    <div class="timer-bar" id="timer-bar"></div>
+    
+    <div class="question-title" id="instruction-text">...</div>
+    <h2 id="question-text" style="font-size: 20px; margin-top: 10px; text-align: left; background: rgba(0,0,0,0.2); padding: 18px; border-radius: 14px; font-weight: normal; border: 1px solid rgba(255,255,255,0.05); line-height: 1.5;">...</h2>
+    
+    <div class="options-container" id="options-box"></div>
+</div>
+
+<!-- 3. NATIJA OYNASI -->
+<div id="result-box" class="container hidden">
+    <h2>Test <span class="highlight">Yakunlandi</span></h2>
+    <p style="font-size: 18px; margin: 20px 0;" id="result-text">Siz 20 ta savoldan 0 tasiga to'g'ri javob berdingiz.</p>
+    <button class="btn-restart" onclick="resetQuiz()">🔄 QAYTA BOSHLASH</button>
+
+    <div class="telegram-box">
+        <a href="https://t.me/eps_master" target="_blank" class="tg-link">
+            Telegram Kanalga azo bo'lish
+        </a>
+    </div>
+</div>
+
+<!-- ⚠️ MA'LUMOTLAR BAZASINI SHU YERDA ULAYMIZ -->
+<script src="questions.js"></script>
+
+<script>
+    let activeQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timeLeft = 30;
+    let timerInterval;
+    let maxTime = 30;
+
+    // Fayl muvaffaqiyatli yuklangandan so'ng bazani tekshirish
+    window.onload = function() {
+        if(typeof questionsDatabase !== 'undefined') {
+            document.getElementById('total-db-count').innerText = `Bazada jami ${questionsDatabase.length} ta tizimli savol bor.`;
+            document.getElementById('quiz-count').max = questionsDatabase.length;
+            document.getElementById('quiz-count').value = Math.min(20, questionsDatabase.length);
+        } else {
+            document.getElementById('total-db-count').innerText = "Xatolik: 'questions.js' fayli topilmadi!";
+        }
+    };
+
+    function startTest() {
+        const countInput = parseInt(document.getElementById('quiz-count').value);
+        maxTime = parseInt(document.getElementById('quiz-time').value);
+        const order = document.getElementById('quiz-order').value;
+
+        const totalCount = Math.min(countInput, questionsDatabase.length);
+
+        if (order === 'random') {
+            activeQuestions = [...questionsDatabase].sort(() => Math.random() - 0.5).slice(0, totalCount);
+        } else {
+            activeQuestions = [...questionsDatabase].slice(0, totalCount);
+        }
+
+        currentQuestionIndex = 0;
+        score = 0;
+
+        document.getElementById('setup-box').classList.add('hidden');
+        document.getElementById('quiz-box').classList.remove('hidden');
+
+        showQuestion();
+    }
+
+    function showQuestion() {
+        clearInterval(timerInterval);
+        
+        if (currentQuestionIndex >= activeQuestions.length) {
+            finishQuiz();
+            return;
+        }
+
+        const currentQuestion = activeQuestions[currentQuestionIndex];
+        
+        document.getElementById('question-counter').innerText = `Savol: ${currentQuestionIndex + 1}/${activeQuestions.length}`;
+        document.getElementById('instruction-text').innerText = currentQuestion.instruction;
+        document.getElementById('question-text').innerHTML = currentQuestion.q.replace(/\n/g, '<br>');
+        
+        const optionsBox = document.getElementById('options-box');
+        optionsBox.innerHTML = '';
+        optionsBox.classList.remove('disabled-options');
+
+        currentQuestion.a.forEach((option, index) => {
+            const button = document.createElement('button');
+            button.className = 'btn-option';
+            button.id = `opt-${index}`;
+            button.innerText = `${index + 1}. ${option}`;
+            button.onclick = () => checkAnswer(index);
+            optionsBox.appendChild(button);
+        });
+
+        timeLeft = maxTime;
+        updateTimerUI();
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimerUI();
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                currentQuestionIndex++;
+                showQuestion();
+            }
+        }, 1000);
+    }
+
+    function updateTimerUI() {
+        document.getElementById('timer-text').innerText = `Vaqt: ${timeLeft}s`;
+        const percent = (timeLeft / maxTime) * 100;
+        document.getElementById('timer-bar').style.width = `${percent}%`;
+    }
+
+    function checkAnswer(selectedIndex) {
+        clearInterval(timerInterval);
+        
+        const optionsBox = document.getElementById('options-box');
+        const currentQuestion = activeQuestions[currentQuestionIndex];
+        
+        optionsBox.classList.add('disabled-options');
+
+        const selectedButton = document.getElementById(`opt-${selectedIndex}`);
+        const correctButton = document.getElementById(`opt-${currentQuestion.correct}`);
+
+        if (selectedIndex === currentQuestion.correct) {
+            selectedButton.classList.add('correct-choice');
+            score++;
+        } else {
+            selectedButton.classList.add('wrong-choice');
+            correctButton.classList.add('correct-choice');
+        }
+
+        setTimeout(() => {
+            currentQuestionIndex++;
+            showQuestion();
+        }, 1200);
+    }
+
+    function finishQuiz() {
+        document.getElementById('quiz-box').classList.add('hidden');
+        document.getElementById('result-box').classList.remove('hidden');
+        document.getElementById('result-text').innerText = `Siz ${activeQuestions.length} ta savoldan ${score} tasiga to'g'ri javob berdingiz.`;
+    }
+
+    function resetQuiz() {
+        document.getElementById('result-box').classList.add('hidden');
+        document.getElementById('setup-box').classList.remove('hidden');
+    }
+</script>
+
+    <script type="module" src="questions.js"></script>
+    <script type="module" src="app.js"></script>
+    
+</body>
+</html>
